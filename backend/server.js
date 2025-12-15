@@ -1,41 +1,61 @@
-// Main server file
-// Loads env, connects to DB, mounts routes, serves uploads
-
-require("dotenv").config(); // load .env
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const dotenv = require("dotenv");
 const path = require("path");
+const fs = require("fs");
+const bcrypt = require("bcryptjs");
 
-const authRoutes = require("./routes/authRoutes");
-const postRoutes = require("./routes/postRoutes");
+dotenv.config();
 
 const app = express();
 
-// middlewares
-app.use(cors()); // allow cross-origin requests
-app.use(express.json()); // parse JSON bodies
+/* ---------- Middlewares ---------- */
+app.use(cors());
+app.use(express.json());
 
-// Serve uploaded images from /uploads (static)
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+/* ---------- Ensure uploads folder exists ---------- */
+const uploadDir = path.join(__dirname, "uploads");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
 
-// API routes
-app.use("/api/auth", authRoutes);
-app.use("/api/posts", postRoutes);
+/* ---------- Serve uploads ---------- */
+app.use("/uploads", express.static(uploadDir));
 
-// catch-all 404 for unknown routes (returns JSON)
+/* ---------- Hash admin password ONCE at server start ---------- */
+if (!process.env.ADMIN_PASSWORD.startsWith("$2")) {
+  const hashed = bcrypt.hashSync(process.env.ADMIN_PASSWORD, 10);
+  process.env.ADMIN_PASSWORD = hashed;
+}
+
+/* ---------- Routes ---------- */
+app.use("/api/auth", require("./routes/authRoutes"));
+app.use("/api/posts", require("./routes/postRoutes"));
+app.use("/api/admin", require("./routes/adminRoutes"));
+
+
+
+/* ---------- Health check ---------- */
+app.get("/", (req, res) => {
+  res.send("Blogo API running");
+});
+
+/* ---------- 404 ---------- */
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
 });
 
-// Connect to MongoDB and start server
-const PORT = process.env.PORT || 5000;
-mongoose.connect(process.env.MONGO_URL)
+/* ---------- DB + Server ---------- */
+mongoose
+  .connect(process.env.MONGO_URL)
   .then(() => {
     console.log("MongoDB Connected");
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    app.listen(process.env.PORT, () =>
+      console.log("Server running on port", process.env.PORT)
+    );
   })
-  .catch(err => {
-    console.error("MongoDB connection error:", err);
+  .catch((err) => {
+    console.error(err);
     process.exit(1);
   });

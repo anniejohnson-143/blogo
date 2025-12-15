@@ -4,10 +4,15 @@ module.exports = (req, res, next) => {
   const auth = req.headers.authorization;
   if (!auth) return res.status(401).json({ message: "No token" });
 
-  const token = auth.startsWith("Bearer ") ? auth.split(" ")[1] : auth;
+  const token = auth.split(" ")[1];
 
   try {
-    req.user = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (decoded.role !== "admin") {
+      return res.status(403).json({ message: "Admin only" });
+    }
+
     next();
   } catch {
     res.status(401).json({ message: "Invalid token" });

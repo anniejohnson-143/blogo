@@ -1,41 +1,19 @@
-// Post routes
-const express = require("express");
-const router = express.Router();
+const router = require("express").Router();
 const multer = require("multer");
-const verifyToken = require("../middlewares/verifyToken"); // exact path
+const verifyToken = require("../middlewares/verifyToken");
+const ctrl = require("../controllers/postController");
 
-const {
-  getAllPosts,
-  getMyPosts,
-  getPostById,
-  createPost,
-  updatePost,
-  deletePost
-} = require("../controllers/postController");
-
-// multer storage config (saves files to /uploads)
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, "uploads/"),
-  filename: (req, file, cb) => cb(null, Date.now() + "-" + file.originalname)
+  destination: "uploads",
+  filename: (_, file, cb) => cb(null, Date.now() + "-" + file.originalname)
 });
 const upload = multer({ storage });
 
-// Public: get all posts
-router.get("/", getAllPosts);
-
-// Protected: get logged-in user's posts (put BEFORE /:id to avoid route conflict)
-router.get("/mine", verifyToken, getMyPosts);
-
-// Public: get single post by id
-router.get("/:id", getPostById);
-
-// Protected: create new post
-router.post("/", verifyToken, upload.single("image"), createPost);
-
-// Protected: update post by id
-router.put("/:id", verifyToken, upload.single("image"), updatePost);
-
-// Protected: delete post
-router.delete("/:id", verifyToken, deletePost);
+router.get("/", ctrl.getAllPosts);
+router.get("/mine", verifyToken, ctrl.getMyPosts);
+router.get("/:id", ctrl.getPostById);
+router.post("/", verifyToken, upload.single("image"), ctrl.createPost);
+router.put("/:id", verifyToken, upload.single("image"), ctrl.updatePost);
+router.delete("/:id", verifyToken, ctrl.deletePost);
 
 module.exports = router;

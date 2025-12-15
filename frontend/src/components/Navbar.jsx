@@ -1,34 +1,39 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-// Simple Navbar: shows Login/Register when not logged in,
-// shows Dashboard + Logout when logged in.
-// Reads user info from localStorage for display.
-
 export default function Navbar() {
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
-  let user = null;
-  try { user = JSON.parse(localStorage.getItem("user")); } catch {}
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+  const token = localStorage.getItem("token");
+  const user = token
+    ? JSON.parse(localStorage.getItem("user") || "null")
+    : null;
+
+  const logout = () => {
+    localStorage.clear();
     navigate("/login");
   };
 
   return (
     <nav className="nav">
-      <div className="nav-left">
-        <Link to="/" className="brand">Blogo</Link>
-      </div>
+      <Link to="/" className="brand">Blogo</Link>
 
       <div className="nav-right">
-        {token ? (
+        {user ? (
           <>
-            <span className="user-name">Hi, {user?.name || "Author"}</span>
-            <Link to="/dashboard" className="nav-link">Dashboard</Link>
-            <button className="btn-logout" onClick={handleLogout}>Logout</button>
+            <span className="user-name">
+              Hi, {user.name || (user.role === "admin" ? "Admin" : "Author")}
+            </span>
+
+            {user.role === "admin" ? (
+              <Link to="/admin" className="nav-link">Admin</Link>
+            ) : (
+              <Link to="/dashboard" className="nav-link">Dashboard</Link>
+            )}
+
+            <button className="btn-logout" onClick={logout}>
+              Logout
+            </button>
           </>
         ) : (
           <>

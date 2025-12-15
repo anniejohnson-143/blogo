@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_BASE } from "../App";
 
-// CreatePost: submit form with FormData for optional image
 export default function CreatePost() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -14,7 +13,6 @@ export default function CreatePost() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!title || !content) return setMsg("Title and content are required");
 
     const fd = new FormData();
     fd.append("title", title);
@@ -22,30 +20,30 @@ export default function CreatePost() {
     fd.append("category", category);
     if (image) fd.append("image", image);
 
-    try {
-      const res = await fetch(`${API_BASE}/posts`, { method: "POST", headers: { authorization: token }, body: fd });
-      if (!res.ok) {
-        const err = await res.json();
-        setMsg(err.message || "Create failed");
-        return;
-      }
-      navigate("/dashboard");
-    } catch (err) {
-      console.error("CreatePost error:", err);
-      setMsg("Server error");
+    const res = await fetch(`${API_BASE}/posts`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+      body: fd
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      return setMsg(err.message);
     }
+
+    navigate("/dashboard");
   };
 
   return (
     <div className="form-container">
-      <h2>Create New Post</h2>
+      <h2>Create Post</h2>
       {msg && <p className="error">{msg}</p>}
       <form onSubmit={handleSubmit}>
-        <input required placeholder="Title" value={title} onChange={e => setTitle(e.target.value)} />
-        <input placeholder="Category" value={category} onChange={e => setCategory(e.target.value)} />
-        <textarea required placeholder="Content" value={content} onChange={e => setContent(e.target.value)}></textarea>
-        <input type="file" accept="image/*" onChange={e => setImage(e.target.files[0])} />
-        <button type="submit">Publish</button>
+        <input required placeholder="Title" onChange={e => setTitle(e.target.value)} />
+        <input placeholder="Category" onChange={e => setCategory(e.target.value)} />
+        <textarea required placeholder="Content" onChange={e => setContent(e.target.value)} />
+        <input type="file" onChange={e => setImage(e.target.files[0])} />
+        <button>Publish</button>
       </form>
     </div>
   );
