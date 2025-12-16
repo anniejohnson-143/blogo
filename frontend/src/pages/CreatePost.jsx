@@ -20,7 +20,7 @@ export default function CreatePost() {
     fd.append("category", category);
     if (image) fd.append("image", image);
 
-    const res = await fetch(`${API_BASE}/posts`, {
+    const res = await fetch(`http://localhost:5000/api/posts`, {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
       body: fd

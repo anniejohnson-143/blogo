@@ -5,9 +5,7 @@ export default function Navbar() {
   const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
-  const user = token
-    ? JSON.parse(localStorage.getItem("user") || "null")
-    : null;
+  const role = localStorage.getItem("role"); // "admin" | "user"
 
   const logout = () => {
     localStorage.clear();
@@ -16,16 +14,18 @@ export default function Navbar() {
 
   return (
     <nav className="nav">
+      {/* LEFT */}
       <Link to="/" className="brand">Blogo</Link>
 
+      {/* RIGHT */}
       <div className="nav-right">
-        {user ? (
+        {token ? (
           <>
             <span className="user-name">
-              Hi, {user.name || (user.role === "admin" ? "Admin" : "Author")}
+              Hi, {role === "admin" ? "Admin" : "Author"}
             </span>
 
-            {user.role === "admin" ? (
+            {role === "admin" ? (
               <Link to="/admin" className="nav-link">Admin</Link>
             ) : (
               <Link to="/dashboard" className="nav-link">Dashboard</Link>
