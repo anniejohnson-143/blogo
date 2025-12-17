@@ -9,11 +9,11 @@ export default function AdminDashboard() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    fetch(`https://blogo-x9yh.onrender.com/admin/users`, { headers })
+    fetch(`https://blogo-x9yh.onrender.com/api/admin/users`, { headers })
       .then(res => res.json())
       .then(setUsers);
 
-    fetch(`https://blogo-x9yh.onrender.com/admin/posts`, { headers })
+    fetch(`https://blogo-x9yh.onrender.com/api/admin/posts`, { headers })
       .then(res => res.json())
       .then(setPosts);
   }, []);
@@ -21,7 +21,7 @@ export default function AdminDashboard() {
   const deleteUser = async (id) => {
     if (!window.confirm("Delete user and all posts?")) return;
 
-    await fetch(`https://blogo-x9yh.onrender.com/admin/users/${id}`, {
+    await fetch(`https://blogo-x9yh.onrender.com/api/admin/users/${id}`, {
       method: "DELETE",
       headers
     });
@@ -30,7 +30,7 @@ export default function AdminDashboard() {
   };
 
   const deletePost = async (id) => {
-    await fetch(`https://blogo-x9yh.onrender.com/admin/posts/${id}`, {
+    await fetch(`https://blogo-x9yh.onrender.com/api/admin/posts/${id}`, {
       method: "DELETE",
       headers
     });

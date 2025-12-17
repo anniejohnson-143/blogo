@@ -6,7 +6,7 @@ export default function Home() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    fetch(`https://blogo-x9yh.onrender.com/posts`)
+    fetch(`https://blogo-x9yh.onrender.com/api/posts`)
       .then(res => res.json())
       .then(setPosts)
       .catch(err => console.error("Home error:", err));

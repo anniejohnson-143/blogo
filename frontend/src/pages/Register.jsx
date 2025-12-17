@@ -10,7 +10,7 @@ export default function Register() {
   const submit = async (e) => {
     e.preventDefault();
 
-    const res = await fetch(`https://blogo-x9yh.onrender.com/auth/register`, {
+    const res = await fetch(`https://blogo-x9yh.onrender.com/api/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form)

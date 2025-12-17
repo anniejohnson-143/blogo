@@ -11,7 +11,7 @@ export default function PostDetail() {
   const [post, setPost] = useState(null);
 
   useEffect(() => {
-    fetch(`https://blogo-x9yh.onrender.com/posts/${id}`)
+    fetch(`https://blogo-x9yh.onrender.com/api/posts/${id}`)
       .then(res => res.json())
       .then(setPost);
   }, [id]);
@@ -19,7 +19,7 @@ export default function PostDetail() {
   const deletePost = async () => {
     if (!window.confirm("Delete this post?")) return;
 
-    const res = await fetch(`https://blogo-x9yh.onrender.com/posts/${id}`, {
+    const res = await fetch(`https://blogo-x9yh.onrender.com/api/posts/${id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` }
     });

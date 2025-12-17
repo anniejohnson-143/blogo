@@ -20,7 +20,7 @@ export default function CreatePost() {
     fd.append("category", category);
     if (image) fd.append("image", image);
 
-    const res = await fetch(`https://blogo-x9yh.onrender.comapi/posts`, {
+    const res = await fetch(`https://blogo-x9yh.onrender.com/api/posts`, {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
       body: fd
