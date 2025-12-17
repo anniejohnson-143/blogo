@@ -11,7 +11,7 @@ dotenv.config();
 const app = express();
 
 /* ---------- Middlewares ---------- */
-app.use(cors({origin:['http://localhost:5173','https://blogo-85cs.vercel.app'
+app.use(cors({origin:['http://localhost:5173','https://blogo-85cs.vercel.app','https://blogo-q53n.vercel.app'
 ]}));
 app.use(express.json());
 
