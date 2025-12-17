@@ -6,7 +6,7 @@ export default function Home() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    fetch(`${API_BASE}/posts`)
+    fetch(`https://blogo-x9yh.onrender.com/posts`)
       .then(res => res.json())
       .then(setPosts)
       .catch(err => console.error("Home error:", err));
@@ -21,7 +21,7 @@ export default function Home() {
           <Link to={`/post/${p._id}`} key={p._id} className="post-card">
             {p.image && (
               <img
-                src={`http://localhost:5000/uploads/${p.image}`}
+                src={`https://blogo-x9yh.onrender.com/uploads/${p.image}`}
                 alt={p.title}
               />
             )}

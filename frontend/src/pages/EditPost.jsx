@@ -14,7 +14,7 @@ export default function EditPost() {
   const [msg, setMsg] = useState("");
 
   useEffect(() => {
-    fetch(`${API_BASE}/posts/${id}`)
+    fetch(`https://blogo-x9yh.onrender.com/posts/${id}`)
       .then(res => res.json())
       .then(data => {
         setTitle(data.title || "");
@@ -32,7 +32,7 @@ export default function EditPost() {
     fd.append("category", category);
     if (image) fd.append("image", image);
 
-    const res = await fetch(`${API_BASE}/posts/${id}`, {
+    const res = await fetch(`https://blogo-x9yh.onrender.com/posts/${id}`, {
       method: "PUT",
       headers: { Authorization: `Bearer ${token}` },
       body: fd

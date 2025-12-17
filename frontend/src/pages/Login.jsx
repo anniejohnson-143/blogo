@@ -10,7 +10,7 @@ export default function Login() {
   const submit = async (e) => {
     e.preventDefault();
 
-    const res = await fetch(`${API_BASE}/auth/login`, {
+    const res = await fetch(`https://blogo-x9yh.onrender.com/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form)

@@ -11,7 +11,8 @@ dotenv.config();
 const app = express();
 
 /* ---------- Middlewares ---------- */
-app.use(cors());
+app.use(cors({origin:['http://localhost:5173','https://blogo-85cs.vercel.app'
+]}));
 app.use(express.json());
 
 /* ---------- Ensure uploads folder exists ---------- */

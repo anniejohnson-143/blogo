@@ -7,7 +7,7 @@ export default function Dashboard() {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    fetch(`${API_BASE}/posts/mine`, {
+    fetch(`https://blogo-x9yh.onrender.com/posts/mine`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())
@@ -17,7 +17,7 @@ export default function Dashboard() {
   const deletePost = async (id) => {
     if (!window.confirm("Delete this post?")) return;
 
-    await fetch(`${API_BASE}/posts/${id}`, {
+    await fetch(`https://blogo-x9yh.onrender.com/posts/${id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` }
     });
